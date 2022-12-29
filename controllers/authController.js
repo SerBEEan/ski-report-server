@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const users = require('../db/user');
+const { user } = require('../db/user');
 const { secret } = require('../config');
 
 const generateAccessToken = (id, roles) => jwt.sign({ id, roles }, secret, { expiresIn: '24h' });
@@ -14,17 +14,17 @@ class AuthController {
                 return res.status(400).json({ message: 'Не корректные данные' });
             }
 
-            const user = users.find((user) => user.username === username);
-            if (!user) {
+            const currentUser = user.find((user) => user.username === username);
+            if (!currentUser) {
                 return res.status(400).json({ message: 'Пользователь не найден' });
             }
 
-            const validPass = bcrypt.compareSync(password, user.password);
+            const validPass = bcrypt.compareSync(password, currentUser.password);
             if (!validPass) {
                 return res.status(400).json({ message: 'Введен неверный пароль' });
             }
 
-            const token = generateAccessToken(user.id, user.roles);
+            const token = generateAccessToken(currentUser.id, currentUser.roles);
             res.json({ token });
         } catch (e) {
             console.log(e);

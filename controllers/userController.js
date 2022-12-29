@@ -1,4 +1,4 @@
-const users = require('../db/user');
+const { user } = require('../db/user');
 
 class UserController {
     getUser(req, res) {
@@ -6,7 +6,7 @@ class UserController {
             // устанавливается в authMiddleware. Берется из токена            
             const { id, roles } = req.user;
 
-            const currentUser = users.find((user) => user.id === id);
+            const currentUser = user.find((user) => user.id === id);
 
             if (!currentUser) {
                 return res.status(500).json({ message: 'Пользователь не найден' });

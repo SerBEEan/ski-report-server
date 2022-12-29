@@ -6,6 +6,6 @@ const router = new Router();
 
 router.get('/', authMiddleware, userController.getUser);
 
-// TODO: сделать остальные методы юзера
+// TODO: продолжить.  сделать остальные методы юзера
 
 module.exports = router;
